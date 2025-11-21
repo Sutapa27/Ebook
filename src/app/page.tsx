@@ -40,7 +40,7 @@ export default async function Home({
           {/* Hero Section */}
           <section className="text-center space-y-6 relative">
             <div className="inline-block mb-4">
-              <Tag variant="accent" className="px-4 py-1 text-sm">
+              <Tag variant="accent" className="px-4 py-1 text-sm text-zinc-500 dark:text-zinc-400">
                 Western Philosophy
               </Tag>
             </div>
