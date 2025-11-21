@@ -34,7 +34,7 @@ export default function LoginPage() {
             }
         }
 
-        setError("Invalid credentials. Try the demo account.");
+        setError("Invalid credentials, try again.");
     };
 
     return (
