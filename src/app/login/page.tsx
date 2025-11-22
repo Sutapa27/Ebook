@@ -87,11 +87,18 @@ export default function LoginPage() {
                     </Button>
                 </form>
 
-                <div className="text-center text-sm text-muted-foreground">
-                    Don&apos;t have an account?{" "}
-                    <Link href="/register" className="text-primary hover:underline font-medium">
-                        Register
-                    </Link>
+                <div className="text-center text-sm text-muted-foreground space-y-2">
+                    <div>
+                        Don&apos;t have an account?{" "}
+                        <Link href="/register" className="text-primary hover:underline font-medium">
+                            Register
+                        </Link>
+                    </div>
+                    <div>
+                        <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors text-xs">
+                            Browse Library as Guest &rarr;
+                        </Link>
+                    </div>
                 </div>
             </GlassPanel>
         </div>

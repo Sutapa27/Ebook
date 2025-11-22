@@ -8,6 +8,7 @@ import { GlassPanel } from "@/components/ui/glass-panel";
 import { Button } from "@/components/ui/button";
 import { Tag } from "@/components/ui/tag";
 import { ArrowLeft, BookOpen, PlayCircle } from "lucide-react";
+import { ReviewSection } from "@/components/reviews/review-section";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -102,6 +103,9 @@ export default async function BookPage({ params }: PageProps) {
                                     ))}
                                 </div>
                             </GlassPanel>
+
+                            {/* Reviews Section */}
+                            <ReviewSection bookSlug={book.slug} />
                         </div>
                     </div>
                 </div>
