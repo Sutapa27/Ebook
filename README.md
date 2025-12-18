@@ -1,28 +1,17 @@
-# Ebook Store - Modern Digital Library Platform
+# 📚 Ebook Store
 
-A beautiful, feature-rich ebook store built with Next.js 14, TypeScript, and Tailwind CSS. Browse, purchase, and read digital books with a stunning glassmorphic UI.
+A modern digital library platform built with Next.js 14, TypeScript, and Tailwind CSS. Browse, purchase, and read ebooks with a beautiful glassmorphic UI.
 
-## ✨ Key Features
 
-- 📚 **Digital Library** - Browse and discover books with beautiful card layouts
-- 🛒 **Shopping Cart** - Add books to cart and checkout seamlessly
-- 📖 **Built-in Reader** - Read purchased books directly in the browser
-- 🔐 **User Authentication** - Secure login/register system with localStorage
-- 👨‍💼 **Admin Panel** - Add new books dynamically (admin-only access)
-- 💳 **Purchase Management** - Track purchased books per user
-- 🎨 **Glassmorphic UI** - Modern, elegant design with glass panel effects
-- 📱 **Fully Responsive** - Optimized for all devices
-- 🌙 **Dark Mode Ready** - Supports dark/light themes
-- ⚡ **Fast & Smooth** - Built with Next.js App Router for optimal performance
+## ✨ Features
 
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: Custom glass-panel components with shadcn/ui
-- **Icons**: Lucide React
-- **Storage**: LocalStorage for demo purposes
+- 📖 Browse and search digital books
+- 🛒 Shopping cart with seamless checkout
+- 📚 Built-in reader with chapter navigation
+- 🔐 User authentication and library management
+- 👨‍💼 Admin panel for adding books
+- 🎨 Glassmorphic UI with smooth animations
+- 📱 Fully responsive design
 
 ## 🚀 Quick Start
 
@@ -34,52 +23,84 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## 📖 User Flow
+## 🛠️ Tech Stack
 
-1. **Browse** - Explore the book collection on the homepage
-2. **Preview** - Click "Read" to preview books before purchasing
-3. **Purchase** - Add books to cart and checkout
-4. **Read** - Access your purchased books anytime in "My Library"
-
-## 🔑 Admin Access
-
-- **Email**: sutapajana353@gmail.com
-- **Password**: sutapa
-- **Admin Route**: `/add-book` (restricted to admin only)
+- **Next.js 14** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **shadcn/ui** - Beautiful UI components
+- **Lucide React** - Modern icons
 
 ## 📁 Project Structure
 
 ```
 app/
-├── page.tsx                 # Home page (book grid)
-├── books/[slug]/           # Book detail & preview
-├── read/[slug]/[chapter]/  # Book reader
-├── login/                   # Login page
-├── register/                # Register page
-├── add-book/                # Admin: Add new books
-├── my-library/              # User's purchased books
-└── checkout/                # Checkout page
+├── page.tsx              # Home page
+├── books/[slug]/         # Book details
+├── read/[slug]/          # Book reader
+├── login/                # Authentication
+├── add-book/             # Admin panel
+├── my-library/           # User library
+└── checkout/             # Checkout flow
+
+components/
+├── layout/               # Header & footer
+├── ui/                   # Reusable components
+└── reviews/              # Review system
+
+data/
+├── books.ts              # Book catalog
+└── book-content.ts       # Chapter content
 ```
 
-## 🎨 Design Features
+## 📖 Usage
 
-- Animated gradient backgrounds
-- Glass panel effects with backdrop blur
-- Smooth hover animations and transitions
-- Compact, space-efficient card layouts
-- Clean typography and spacing
-- Color-coded book covers with gradients
+1. **Browse** - Explore the book collection
+2. **Preview** - Read first chapter for free
+3. **Purchase** - Add to cart and checkout
+4. **Read** - Access purchased books anytime
 
-## 📝 License
+## 🔧 Configuration
 
-MIT License - feel free to use for personal or commercial projects
+Create a `.env.local` file for environment variables:
+
+```env
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+## 🚧 Development
+
+```bash
+# Development
+npm run dev
+
+# Build
+npm run build
+
+# Production
+npm start
+
+# Lint
+npm run lint
+```
+
+## 📝 Notes
+
+- Uses localStorage for demo purposes
+- First chapter of each book is free to preview
+- Admin features require authentication
+- For production, implement proper backend and database
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-**Note**: This is a demo application using localStorage for data persistence. For production use, integrate a proper backend and database.
-
----
- 
- Made with 🤍 by Sutapa
+**Built with ❤️ using Next.js and TypeScript by Sutapa**
