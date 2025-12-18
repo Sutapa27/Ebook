@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Tag } from "@/components/ui/tag";
 import Link from "next/link";
 import Image from "next/image";
-import { BookOpen, ShoppingCart, CheckCircle, Sparkles } from "lucide-react";
+import { BookOpen, ShoppingCart, CheckCircle, Sparkles, Trash2 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -20,20 +20,23 @@ export default function HomePage() {
     const [cartItems, setCartItems] = useState<string[]>([]);
     const [purchasedBooks, setPurchasedBooks] = useState<string[]>([]);
 
-    useEffect(() => {
-        // Load all books (default + custom)
+    const isAdmin = user?.email === "sutapajana353@gmail.com";
+
+    const loadBooks = () => {
         const customBooks = localStorage.getItem("custom-books");
         const customBooksArray = customBooks ? JSON.parse(customBooks) : [];
         setAllBooks([...books, ...customBooksArray]);
+    };
 
-        // Load cart
+    useEffect(() => {
+        loadBooks();
+
         const cart = localStorage.getItem("cart");
         if (cart) {
             const cartArray = JSON.parse(cart);
             setCartItems(cartArray.map((item: any) => item.slug));
         }
 
-        // Load purchased books
         if (user) {
             const purchased = localStorage.getItem(`purchased-${user.email}`);
             if (purchased) {
@@ -71,12 +74,38 @@ export default function HomePage() {
         }
     };
 
+    const deleteBook = (bookSlug: string, bookTitle: string) => {
+        if (!isAdmin) return;
+
+        const confirmed = confirm(`Are you sure you want to delete "${bookTitle}"? This action cannot be undone.`);
+        if (!confirmed) return;
+
+        // Remove from custom books
+        const customBooks = localStorage.getItem("custom-books");
+        if (customBooks) {
+            const booksArray = JSON.parse(customBooks);
+            const updatedBooks = booksArray.filter((b: any) => b.slug !== bookSlug);
+            localStorage.setItem("custom-books", JSON.stringify(updatedBooks));
+        }
+
+        // Remove chapters
+        const content = localStorage.getItem("book-content");
+        if (content) {
+            const allContent = JSON.parse(content);
+            delete allContent[bookSlug];
+            localStorage.setItem("book-content", JSON.stringify(allContent));
+        }
+
+        // Reload books
+        loadBooks();
+    };
+
     const isPurchased = (bookSlug: string) => purchasedBooks.includes(bookSlug);
     const isInCart = (bookSlug: string) => cartItems.includes(bookSlug);
+    const isOwnBook = (book: any) => user && book.addedBy === user.email;
 
     return (
         <div className="min-h-screen flex flex-col relative overflow-hidden">
-            {/* Background Gradients */}
             <div className="fixed inset-0 -z-10">
                 <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 blur-[120px] animate-pulse" />
                 <div className="absolute bottom-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-accent/10 blur-[100px]" />
@@ -86,7 +115,6 @@ export default function HomePage() {
 
             <main className="flex-1 pt-32 pb-16 px-4 md:px-6">
                 <div className="max-w-7xl mx-auto">
-                    {/* Hero Section */}
                     <div className="text-center mb-16">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 mb-4">
                             <Sparkles className="h-4 w-4 text-primary" />
@@ -100,11 +128,11 @@ export default function HomePage() {
                         </p>
                     </div>
 
-                    {/* Books Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {allBooks.map((book) => {
                             const purchased = isPurchased(book.slug);
                             const inCart = isInCart(book.slug);
+                            const ownBook = isOwnBook(book);
 
                             return (
                                 <GlassPanel
@@ -122,16 +150,21 @@ export default function HomePage() {
                                             />
                                             <div className={`absolute inset-0 bg-gradient-to-br ${book.coverColor} opacity-20 mix-blend-overlay`} />
                                             
-                                            {/* Purchased Badge */}
-                                            {purchased && (
+                                            {ownBook && (
+                                                <div className="absolute top-3 right-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                                    <CheckCircle className="h-3 w-3" />
+                                                    Your Book
+                                                </div>
+                                            )}
+                                            
+                                            {purchased && !ownBook && (
                                                 <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
                                                     <CheckCircle className="h-3 w-3" />
                                                     Owned
                                                 </div>
                                             )}
 
-                                            {/* Price Badge */}
-                                            {!purchased && book.price && (
+                                            {!purchased && !ownBook && book.price && (
                                                 <div className="absolute top-3 left-3 bg-black/80 text-white px-3 py-1 rounded-full text-sm font-bold">
                                                     ₹{book.price.toFixed(2)}
                                                 </div>
@@ -157,9 +190,28 @@ export default function HomePage() {
                                             ))}
                                         </div>
 
-                                        {/* Action Buttons */}
                                         <div className="flex flex-col gap-1.5 pt-1">
-                                            {purchased ? (
+                                            {ownBook ? (
+                                                <>
+                                                    <Button className="w-full h-8 text-xs" size="sm" asChild>
+                                                        <Link href={`/read/${book.slug}/1`}>
+                                                            <BookOpen className="mr-1 h-3 w-3" />
+                                                            Read Book
+                                                        </Link>
+                                                    </Button>
+                                                    {isAdmin && (
+                                                        <Button 
+                                                            variant="destructive" 
+                                                            className="w-full h-8 text-xs" 
+                                                            size="sm"
+                                                            onClick={() => deleteBook(book.slug, book.title)}
+                                                        >
+                                                            <Trash2 className="mr-1 h-3 w-3" />
+                                                            Delete
+                                                        </Button>
+                                                    )}
+                                                </>
+                                            ) : purchased ? (
                                                 <Button className="w-full h-8 text-xs" size="sm" asChild>
                                                     <Link href={`/read/${book.slug}/1`}>
                                                         <BookOpen className="mr-1 h-3 w-3" />
@@ -219,7 +271,6 @@ export default function HomePage() {
                         })}
                     </div>
 
-                    {/* Empty State */}
                     {allBooks.length === 0 && (
                         <div className="text-center py-16">
                             <BookOpen className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
